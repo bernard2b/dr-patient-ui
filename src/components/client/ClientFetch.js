@@ -1,5 +1,6 @@
 import React, { useEffect, useState } from "react";
 import { DataGrid } from "@mui/x-data-grid";
+import './ClientFetch.css';
 
 function ClientFetch() {
   const [patientData, setPatientData] = useState("");
@@ -27,7 +28,7 @@ function ClientFetch() {
     { field: "dob", headerName: "Date Of Birth", width: 130 },
   ];
 
-  const rows = Object.values(patientData).map((patient) => ({
+  const rows = Object.values(patientData).map((patient, index) => ({
     id: patient.id,
     firstName: patient.firstName,
     lastName: patient.lastName,
@@ -35,10 +36,13 @@ function ClientFetch() {
     email: patient.email,
     dob: patient.dateOfBirth,
     contact: patient.contactNumber,
+    rowClassName: index % 2 === 0 ? "even-row" : "odd-row"
   }));
 
   return (
-    <div style={{ height: "100vh", width: "100%" }}>
+    <div className="section">
+    <div className="grid"
+    style={{ height: "100vh", width: "100%" }}>
       <DataGrid
         rows={rows}
         columns={columns}
@@ -49,7 +53,9 @@ function ClientFetch() {
         }}
         pageSizeOptions={[5, 10, 15]}
         checkboxSelection
+        getRowClassName={(params) => params.row.rowClassName}
       />
+    </div>
     </div>
   );
 }

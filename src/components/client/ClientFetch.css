@@ -1,0 +1,24 @@
+* {
+  padding: 0;
+  margin: 0;
+}
+
+.section {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: 100vh;
+  background-color: #486161;
+}
+
+.grid {
+  background-color: #ffffff;
+  max-width: 94%;
+  max-height: 80%;
+  border-radius: 10px;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+}
+
+.odd-row {
+  background-color: #f6f3f3f4;
+}
