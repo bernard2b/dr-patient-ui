@@ -3,7 +3,7 @@ import "./CreateClient.css";
 import Box from "@mui/material/Box";
 import TextField from "@mui/material/TextField";
 import MenuItem from "@mui/material/MenuItem";
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import dayjs from "dayjs";
 import { LocalizationProvider } from "@mui/x-date-pickers/LocalizationProvider";
 import { AdapterDayjs } from "@mui/x-date-pickers/AdapterDayjs";
@@ -13,11 +13,12 @@ import Button from "@mui/material/Button";
 function CreateClient() {
   const [firstName, setFirstName] = useState("");
   const [lastName, setLastName] = useState("");
-  const [gender, setGender] = useState("");
+  const [gender, setGender] = useState(" ");
   const [dob, setDob] = useState("");
   const [email, setEmail] = useState("");
   const [contact, setContact] = useState("");
   const [doctor, setDoctor] = useState("");
+  const [doctorNames, setDoctorNames] = useState([""]);
 
   const genders = [
     {
@@ -70,6 +71,20 @@ function CreateClient() {
 
     createClient(data);
   };
+
+  useEffect(() => {
+    async function fetchDoctorsDetails() {
+      try {
+        const resp = await fetch("http://localhost:8080/doctors");
+        const data = await resp.json();
+        const names = data.map((doctor) => doctor.firstName + " " + doctor.lastName);
+        setDoctorNames(names);
+      } catch (error) {
+        console.error("Failed to fetch: ", error);
+      }
+    }
+    fetchDoctorsDetails();
+  }, []); 
 
   return (
     <div className="section">
@@ -136,13 +151,20 @@ function CreateClient() {
             size="small"
             onChange={(e) => setContact(e.target.value)}
           />
-          <TextField
-            id="standard-basic"
+         <TextField
+            id="standard-select-doctor"
+            select
             label="Doctor"
             variant="standard"
             size="small"
             onChange={(e) => setDoctor(e.target.value)}
-          />
+          >
+            {doctorNames.map((name) => (
+              <MenuItem key={name} value={name}>
+                {name}
+              </MenuItem>
+            ))}
+          </TextField>
         </Box>
         <div className="submit">
           <Button variant="outlined" onClick={onSubmit}>
